@@ -1,26 +1,26 @@
 package mobile.forged.com.health;
 
-import android.app.Activity;
-
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.widget.Toast;
+
+import mobile.forged.com.health.controllers.DataCallback;
+import mobile.forged.com.health.controllers.RequestController;
 
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
+    private RequestController _requestController;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -36,6 +36,15 @@ public class MainActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        _requestController = new RequestController();
+
+        _requestController.getTopicsByTopicName("https://www.khanacademy.org/api/v1/topic/math", new DataCallback<String>() {
+            @Override
+            public void receiveResults(String results) {
+                Toast.makeText(getApplicationContext(), "Got response. " + results, Toast.LENGTH_LONG).show();
+            }
+        });
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -135,6 +144,9 @@ public class MainActivity extends Activity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+
+
             return rootView;
         }
 
