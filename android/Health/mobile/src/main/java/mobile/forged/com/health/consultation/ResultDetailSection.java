@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
-import java.lang.ref.Reference;
 import java.util.ArrayList;
 
 import mobile.forged.com.health.ParcelHelper;
@@ -25,7 +24,7 @@ public class ResultDetailSection implements Parcelable, Serializable
 	public ResultDetailSectionType type;
 	public boolean containsSubHeaders;
 	public boolean isReferenceType;
-	public ArrayList<Reference> refContents;
+	public ArrayList<Parcelable> refContents;
 	public ArrayList<ResultDetail> details;
 	public ArrayList<ResultDetailSection> causeDetailHeaderContents;
 
@@ -62,8 +61,8 @@ public class ResultDetailSection implements Parcelable, Serializable
 				ResultDetailSectionType.class, in);
 		containsSubHeaders = ParcelHelper.readBoolean(in);
 		isReferenceType = ParcelHelper.readBoolean(in);
-		refContents = new ArrayList<Reference>();
-		in.readTypedList(refContents, Reference.CREATOR);
+		refContents = new ArrayList<Parcelable>();
+//		in.readTypedList(refContents, Parcelable.CREATOR);
 		details = new ArrayList<ResultDetail>();
 		in.readTypedList(details, ResultDetail.CREATOR);
 		causeDetailHeaderContents = new ArrayList<ResultDetailSection>();

@@ -325,7 +325,7 @@ public class SharecareClient extends ServiceClient
 //        CLIENT_ID = "askmd-mobile";
 //        CLIENT_SECRET = "u7#kl91hkg0";
 
-        CLIENT_ID = "askmd-mobile";nte
+        CLIENT_ID = "askmd-mobile";
         CLIENT_SECRET = "u7#kl91hkg0";
 
         REGISTER_ENDPOINT = AUTH_SERVICE_URL + "/account/";

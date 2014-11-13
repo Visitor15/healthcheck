@@ -3,7 +3,6 @@ package mobile.forged.com.health.managers;
 
 import android.graphics.Bitmap;
 
-import com.google.android.gms.internal.id;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -17,8 +16,6 @@ import com.nascentdigital.util.observing.ObservableArrayList;
 import com.nascentdigital.util.observing.ObservableField;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -30,9 +27,7 @@ import mobile.forged.com.health.consultation.ConsultSummary.InvalidDocumentTypeE
 import mobile.forged.com.health.consultation.Consultation;
 import mobile.forged.com.health.consultation.Result;
 import mobile.forged.com.health.consultation.ResultCategory;
-import mobile.forged.com.health.profile.BaseProfile;
 import mobile.forged.com.health.profile.InsuranceProfile;
-import mobile.forged.com.health.profile.Medication;
 import mobile.forged.com.health.profile.Profile;
 import mobile.forged.com.health.profile.ProfilePhysician;
 import mobile.forged.com.health.profile.SecondaryProfile;
@@ -128,7 +123,7 @@ public class ProfileManager extends Observable
 		}
 		
 		//cascade to other managers
-		QuestionnaireManager.instance.saveState();
+//		QuestionnaireManager.instance.saveState();
 //		ConsultationManager._consultManagerinstance.saveState();
 	}
 
@@ -180,8 +175,8 @@ public class ProfileManager extends Observable
 		}
 		
 		//cascade to other managers
-		QuestionnaireManager.instance.unfreeze();
-		ConsultationManager._consultManagerinstance.unfreeze();
+//		QuestionnaireManager.instance.unfreeze();
+//		ConsultationManager._consultManagerinstance.unfreeze();
 	}
 
 	public void logout()

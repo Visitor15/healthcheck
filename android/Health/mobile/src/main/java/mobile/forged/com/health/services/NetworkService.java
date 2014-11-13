@@ -11,6 +11,8 @@ import android.os.RemoteException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.nascentdigital.communication.ServiceClientCompletion;
+import com.nascentdigital.communication.ServiceResultStatus;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mobile.forged.com.health.common.Topic;
+import mobile.forged.com.health.managers.ProfileManager;
 import mobile.forged.com.health.networking.HttpConnector;
 
 /**
@@ -103,7 +106,9 @@ public class NetworkService extends BasicService {
         switch(requestCommand) {
 
             case ACCEPT_RETURN_JSON_RESPONSE: {
-                acceptAndReturnJsonResponse(Message.obtain(msg));
+                logIntoSharecare(Message.obtain(msg));
+
+//                acceptAndReturnJsonResponse(Message.obtain(msg));
                 break;
             }
             case ACCEPT_PARSE_JSON_RESPONSE: {
@@ -169,6 +174,22 @@ public class NetworkService extends BasicService {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    private void logIntoSharecare(Message msg) {
+        SharecareClient.getSharedInstance().loginWithEmail("nc@email.com", "password", new ServiceClientCompletion<ResponseResult>() {
+            @Override
+            public void onCompletion(ServiceResultStatus serviceResultStatus, int responseCode, ResponseResult resultValue) {
+                System.out.println(responseCode);
+
+                ProfileManager._profileManagerInstance.createProfileWithCompletion(new ServiceClientCompletion<ResponseResult>() {
+                    @Override
+                    public void onCompletion(ServiceResultStatus serviceResultStatus, int responseCode, ResponseResult resultValue) {
+                        System.out.println(responseCode);
+                    }
+                });
+            }
+        });
     }
 
     private void acceptParseAndReturnResponse(Message msg) {
