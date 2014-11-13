@@ -5,17 +5,28 @@ import android.util.Base64;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.net.ssl.HttpsURLConnection;
+import java.util.Set;
 
 import mobile.forged.com.health.services.SharecareToken;
 
@@ -338,7 +349,7 @@ public class HttpConnector {
                 DATA_SERVICE_URL + "/hospital?location=%s,%s";
 
         // Set the base64 encoded authorization header
-        final String clientString = CLIENT_ID + ":" + CLIENT_SECRET;
+        final String clientString = "nc@email.com" + ":" + "password";
         byte[] data = null;
         try
         {
@@ -402,6 +413,66 @@ public class HttpConnector {
 
     private void constructRequest(String url) throws IOException {
 
+
+//        RestClient _restClient = new RestClient();
+
+
+       ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+//    private ArrayList <NameValuePair> headers;
+
+        HttpGet get;
+        HttpParams httpParameters;
+        try
+        {
+            httpParameters = new BasicHttpParams();
+//            String auth = android.util.Base64.encodeToString(
+//                    (username + ":" + userpwd).getBytes("UTF-8"),
+//                    android.util.Base64.NO_WRAP
+//            );
+
+            httpParameters.setParameter("Content-Type", "application/json");
+            httpParameters.setParameter("grant_type", PASSWORD);
+
+            HttpPost request = new HttpPost(url);
+            request.addHeader("Authorization", AUTHORIZATION_HEADER);
+                    request.addHeader("Content-Type", "application/json");
+
+
+            final HashMap<String, Object> body = new HashMap<String, Object>(3);
+            body.put(USERNAME, "nc@email.com");
+            body.put(PASSWORD, "password");
+            body.put(REMEMBER_ME, "false");
+
+
+            params.add(new BasicNameValuePair("Content", "application/json"));
+            params.add(new BasicNameValuePair("grant_type", PASSWORD));
+            params.add(new BasicNameValuePair(USERNAME, "nc@email.com"));
+            params.add(new BasicNameValuePair(PASSWORD, "password"));
+            params.add(new BasicNameValuePair(REMEMBER_ME, "false"));
+
+            request.setEntity(new UrlEncodedFormEntity(params));
+//            HttpConnectionParams.setSoTimeout(httpParameters, 30);
+            DefaultHttpClient client = new DefaultHttpClient(httpParameters);
+            HttpResponse response = client.execute(request);
+            String userAuth = EntityUtils.toString(response.getEntity());
+
+            System.out.println("Data. in login.."+userAuth);
+
+//            _restClient.executeRequest(RestClient.RequestMethod.POST, url, httpParameters, httpHeaders, httpBody, userName, password);
+
+
+        }
+
+        catch(Exception e)
+        {
+
+            System.out.println("Error.."+e);
+        }
+
+
+
+
+
         // Create request headers.
         final HashMap<String, String> headers = new HashMap<String, String>(2);
         headers.put("Authorization", AUTHORIZATION_HEADER);
@@ -418,6 +489,8 @@ public class HttpConnector {
         body.put(PASSWORD, "password");
         body.put(REMEMBER_ME, "false");
 
+
+
 //        url += "?"
 
         final Gson gson = new GsonBuilder().create();
@@ -429,12 +502,22 @@ public class HttpConnector {
 
         String charset = "UTF-8";
         String _request = "";
+        String query = "";
+        Set<String> keys = parameters.keySet();
+        for( String k : keys) {
 
-//        String query = String.format("param1=%s&param2=%s",
-//                URLEncoder.encode(param1, charset),
-//                URLEncoder.encode(param2, charset));
+            query += String.format("%s=%s&", k, parameters.get(k));
 
-        URLConnection _urlConnection = new URL(url).openConnection();
+        }
+        url += "?" + query;
+
+
+
+        HttpURLConnection _urlConnection = (HttpURLConnection) new URL(url).openConnection();
+        _urlConnection.setRequestMethod("POST");
+        _urlConnection.setRequestProperty("Content-Type", "application/json");
+        _urlConnection.setRequestProperty("Authorization", AUTHORIZATION_HEADER);
+//        Map<String, List<String>> headerFields = _urlConnection.getHeaderFields();
 
         InputStream _response;
 
@@ -448,13 +531,16 @@ public class HttpConnector {
 //        _urlConnection.setRequestProperty("Accept","*/*");
 
 
+//        HttpConnection httpConnection
+
         OutputStreamWriter wr= new OutputStreamWriter(_urlConnection.getOutputStream());
         wr.write(bodyJson);
         wr.flush();
 
-        InputStream str = ((HttpsURLConnection) _urlConnection).getErrorStream();
+//        InputStream str = ((HttpsURLConnection) _urlConnection).getErrorStream();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(str));
+        InputStream inStream = _urlConnection.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
 
         String line = "";
         StringBuilder strBuilder = new StringBuilder(line);

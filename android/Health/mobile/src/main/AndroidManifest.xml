@@ -21,8 +21,14 @@
         </activity>
 
         <service
+            android:enabled="true"
             android:name=".services.NetworkService"
-            android:exported="true"/>
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="com.forged.mobile.network_service.START_SERVICE" />
+            </intent-filter>
+            </service>
     </application>
 
 </manifest>
