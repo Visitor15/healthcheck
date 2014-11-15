@@ -4,30 +4,26 @@ import android.util.Base64;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nascentdigital.communication.ServiceClientCompletion;
+import com.nascentdigital.communication.ServiceResultStatus;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
+import mobile.forged.com.health.services.ResponseResult;
+import mobile.forged.com.health.services.SharecareClient;
 import mobile.forged.com.health.services.SharecareToken;
 
 /**
@@ -349,7 +345,7 @@ public class HttpConnector {
                 DATA_SERVICE_URL + "/hospital?location=%s,%s";
 
         // Set the base64 encoded authorization header
-        final String clientString = "nc@email.com" + ":" + "password";
+        final String clientString = "testuser@email.com" + ":" + "password";
         byte[] data = null;
         try
         {
@@ -372,7 +368,12 @@ public class HttpConnector {
 
     public String postForResponse(String url) throws Exception {
 
-        constructRequest(LOGIN_ENDPOINT);
+//        login("", "");
+
+        constructRequest("http://192.168.201.53:8080/data/user/test-user-1/wall/mobile/private");
+
+//        tryWithSharecareClient();
+//        constructRequest(LOGIN_ENDPOINT);
 
 
 //        HttpURLConnection httpConnection = null;
@@ -411,67 +412,14 @@ public class HttpConnector {
         return "";
     }
 
-    private void constructRequest(String url) throws IOException {
-
-
-//        RestClient _restClient = new RestClient();
-
-
-       ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-//    private ArrayList <NameValuePair> headers;
-
-        HttpGet get;
-        HttpParams httpParameters;
-        try
-        {
-            httpParameters = new BasicHttpParams();
-//            String auth = android.util.Base64.encodeToString(
-//                    (username + ":" + userpwd).getBytes("UTF-8"),
-//                    android.util.Base64.NO_WRAP
-//            );
-
-            httpParameters.setParameter("Content-Type", "application/json");
-            httpParameters.setParameter("grant_type", PASSWORD);
-
-            HttpPost request = new HttpPost(url);
-            request.addHeader("Authorization", AUTHORIZATION_HEADER);
-                    request.addHeader("Content-Type", "application/json");
-
-
-            final HashMap<String, Object> body = new HashMap<String, Object>(3);
-            body.put(USERNAME, "nc@email.com");
-            body.put(PASSWORD, "password");
-            body.put(REMEMBER_ME, "false");
-
-
-            params.add(new BasicNameValuePair("Content", "application/json"));
-            params.add(new BasicNameValuePair("grant_type", PASSWORD));
-            params.add(new BasicNameValuePair(USERNAME, "nc@email.com"));
-            params.add(new BasicNameValuePair(PASSWORD, "password"));
-            params.add(new BasicNameValuePair(REMEMBER_ME, "false"));
-
-            request.setEntity(new UrlEncodedFormEntity(params));
-//            HttpConnectionParams.setSoTimeout(httpParameters, 30);
-            DefaultHttpClient client = new DefaultHttpClient(httpParameters);
-            HttpResponse response = client.execute(request);
-            String userAuth = EntityUtils.toString(response.getEntity());
-
-            System.out.println("Data. in login.."+userAuth);
-
-//            _restClient.executeRequest(RestClient.RequestMethod.POST, url, httpParameters, httpHeaders, httpBody, userName, password);
-
-
-        }
-
-        catch(Exception e)
-        {
-
-            System.out.println("Error.."+e);
-        }
 
 
 
 
+
+
+
+    private void login(String email, String password) throws IOException {
 
         // Create request headers.
         final HashMap<String, String> headers = new HashMap<String, String>(2);
@@ -485,7 +433,7 @@ public class HttpConnector {
 
         // Create request body.
         final HashMap<String, Object> body = new HashMap<String, Object>(3);
-        body.put(USERNAME, "nc@email.com");
+        body.put(USERNAME, "testuser@email.com");
         body.put(PASSWORD, "password");
         body.put(REMEMBER_ME, "false");
 
@@ -496,33 +444,16 @@ public class HttpConnector {
         final Gson gson = new GsonBuilder().create();
         final String bodyJson = gson.toJson(body);
 
-
-
-//        URLConnection connection = new URL(url).openConnection();
-
-        String charset = "UTF-8";
-        String _request = "";
-        String query = "";
-        Set<String> keys = parameters.keySet();
-        for( String k : keys) {
-
-            query += String.format("%s=%s&", k, parameters.get(k));
-
-        }
-        url += "?" + query;
-
-
-
-        HttpURLConnection _urlConnection = (HttpURLConnection) new URL(url).openConnection();
-        _urlConnection.setRequestMethod("POST");
+        HttpURLConnection _urlConnection = (HttpURLConnection) new URL("http://192.168.201.54:8080/data/user/test-user-1/wall/mobile/private").openConnection();
+        _urlConnection.setRequestMethod("GET");
         _urlConnection.setRequestProperty("Content-Type", "application/json");
-        _urlConnection.setRequestProperty("Authorization", AUTHORIZATION_HEADER);
+        _urlConnection.setRequestProperty("Authorization", "SSO rDjKqrmf_M7pZGZq6l6V8rPdNHz0h6i_X3fzsRE8AxnqxiYkrwjwFkeotq3pm5YHdiI0wZCQiwh4-zNY-nxmqYgB06GA6ntiS-oKwS3w_cV7FuCPABQ7J_GwfVtsydUjCdQZrLBcWxp31aK4-c86KRhmQ9OgzOW0");
 //        Map<String, List<String>> headerFields = _urlConnection.getHeaderFields();
 
         InputStream _response;
 
-//        _urlConnection.setDoInput(true);
-        _urlConnection.setDoOutput(true); // Triggers POST.
+        _urlConnection.setDoInput(true);
+//        _urlConnection.setDoOutput(true); // Triggers POST.
 //        _urlConnection.setRequestProperty("Accept-Charset", charset);
 //        _urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
 //        _urlConnection.setRequestProperty("Content-Type", "application/json");
@@ -533,9 +464,9 @@ public class HttpConnector {
 
 //        HttpConnection httpConnection
 
-        OutputStreamWriter wr= new OutputStreamWriter(_urlConnection.getOutputStream());
-        wr.write(bodyJson);
-        wr.flush();
+//        OutputStreamWriter wr= new OutputStreamWriter(_urlConnection.getOutputStream());
+//        wr.write(bodyJson);
+//        wr.flush();
 
 //        InputStream str = ((HttpsURLConnection) _urlConnection).getErrorStream();
 
@@ -550,19 +481,173 @@ public class HttpConnector {
 
 
         Object obj = _urlConnection.getContent();
+    }
 
-//        _response = _urlConnection.getInputStream();
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(_response));
+    private void tryWithSharecareClient() {
+        SharecareClient.getSharedInstance().loginWithEmail("testuser@email.com", "password", new ServiceClientCompletion<ResponseResult>() {
+            @Override
+            public void onCompletion(ServiceResultStatus serviceResultStatus, int responseCode, ResponseResult resultValue) {
+                System.out.println(responseCode);
+            }
+        });
+    }
 
+    private void constructRequest(String url) throws IOException {
+
+
+//        RestClient _restClient = new RestClient();
+
+
+//       ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+////    private ArrayList <NameValuePair> headers;
+//
+//        HttpGet get;
+//        HttpParams httpParameters;
+//        try
+//        {
+//            httpParameters = new BasicHttpParams();
+////            String auth = android.util.Base64.encodeToString(
+////                    (username + ":" + userpwd).getBytes("UTF-8"),
+////                    android.util.Base64.NO_WRAP
+////            );
+//
+//            httpParameters.setParameter("Content-Type", "application/json");
+//            httpParameters.setParameter("grant_type", "bearer");
+//
+//            HttpPost request = new HttpPost(url);
+//            request.addHeader("Authorization", "SSO rDjKqrmf_M7pZGZq6l6V8rPdNHz0h6i_X3fzsRE8AxnqxiYkrwjwFkeotq3pm5YHdiI0wZCQiwh4-zNY-nxmqYgB06GA6ntiS-oKwS3w_cV7FuCPABQ7J_GwclJmz9ogDtcZrLBcWxp31aK4-c86KRhmQ9OgzOW0");
+////                    request.addHeader("Content-Type", "application/json");
+//
+//
+//            final HashMap<String, Object> body = new HashMap<String, Object>(3);
+//            body.put(USERNAME, "testuser@email.com");
+//            body.put(PASSWORD, "password");
+//            body.put(REMEMBER_ME, "false");
+//
+//
+////            params.add(new BasicNameValuePair("Content", "application/json"));
+////            params.add(new BasicNameValuePair("grant_type", "bearer"));
+//            params.add(new BasicNameValuePair("Authorization", "SSO rDjKqrmf_M7pZGZq6l6V8rPdNHz0h6i_X3fzsRE8AxnqxiYkrwjwFkeotq3pm5YHdiI0wZCQiwh4-zNY-nxmqYgB06GA6ntiS-oKwS3w_cV7FuCPABQ7J_GwclJmz9ogDtcZrLBcWxp31aK4-c86KRhmQ9OgzOW0"));
+//
+////            request.setEntity(new UrlEncodedFormEntity(params));
+////            HttpConnectionParams.setSoTimeout(httpParameters, 30);
+//            DefaultHttpClient client = new DefaultHttpClient(httpParameters);
+//            HttpResponse response = client.execute(request);
+//            String userAuth = EntityUtils.toString(response.getEntity());
+//
+//            System.out.println("Data. in login.."+userAuth);
+//
+////            _restClient.executeRequest(RestClient.RequestMethod.POST, url, httpParameters, httpHeaders, httpBody, userName, password);
+//
+//
+//        }
+//
+//        catch(Exception e)
+//        {
+//
+//            System.out.println("Error.."+e);
+//        }
+//
+//
+//
+//
+//
+//        // Create request headers.
+//        final HashMap<String, String> headers = new HashMap<String, String>(2);
+//        headers.put("Authorization", AUTHORIZATION_HEADER);
+//        headers.put("Content-Type", "application/json");
+//
+//        // Create request parameters.
+//        final HashMap<String, String> parameters =
+//                new HashMap<String, String>(1);
+//        parameters.put("grant_type", PASSWORD);
+//
+//        // Create request body.
+//        final HashMap<String, Object> body = new HashMap<String, Object>(3);
+//        body.put(USERNAME, "nc@email.com");
+//        body.put(PASSWORD, "password");
+//        body.put(REMEMBER_ME, "false");
+//
+//
+//
+////        url += "?"
+//
+//        final Gson gson = new GsonBuilder().create();
+//        final String bodyJson = gson.toJson("");
+//
+//
+//
+////        URLConnection connection = new URL(url).openConnection();
+//
+//        String charset = "UTF-8";
+//        String _request = "";
+//        String query = "";
+//        Set<String> keys = parameters.keySet();
+//        for( String k : keys) {
+//
+//            query += String.format("%s=%s&", k, parameters.get(k));
+//
+//        }
+//        url += "?" + query;
+//
+
+
+        HttpGet _get = new HttpGet("http://192.168.201.53:8080/data/user/test-user-1/wall/mobile/private");
+        _get.addHeader("Authorization", "SSO rDjKqrmf_M7pZGZq6l6V8rPdNHz0h6i_X3fzsRE8AxnqxiYkrwjwFkeotq3pm5YHdiI0wZCQiwh4-zNY-nxmqYgB06GA6ntiS-oKwS3w_cV7FuCPABQ7J_GwfVtsydUjCdQZrLBcWxp31aK4-c86KRhmQ9OgzOW0");
+        HttpClient client = new DefaultHttpClient();
+        HttpResponse response = client.execute(_get);
+        HttpEntity resEntity = response.getEntity();
+
+//        HttpURLConnection _urlConnection = (HttpURLConnection) new URL("http://192.168.201.54:8080/data/user/test-user-1/wall/mobile/private").openConnection();
+//        _urlConnection.setRequestMethod("GET");
+//        _urlConnection.setRequestProperty("Content-Type", "application/json");
+//        _urlConnection.setRequestProperty("Authorization", "SSO rDjKqrmf_fM7pZGZq6l6V8rPdNHz0h6i_X3fzsRE8AxnqxiYkrwjwFkeotq3pm5YHdiI0wZCQiwh4-zNY-nxmqYgB06GA6ntiS-oKwS3w_cV7FuCPABQ7J_GwclJmz9ogDtcZrLBcWxp31aK4-c86KRhmQ9OgzOW0");
+////        Map<String, List<String>> headerFields = _urlConnection.getHeaderFields();
+//
+        InputStream _response = resEntity.getContent();
+//
+//        _urlConnection.setDoInput(true);
+////        _urlConnection.setDoOutput(true); // Triggers POST.
+////        _urlConnection.setRequestProperty("Accept-Charset", charset);
+////        _urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
+////        _urlConnection.setRequestProperty("Content-Type", "application/json");
+//
+//        _urlConnection.setRequestProperty("User-Agent","Mozilla/5.0 ( compatible ) ");
+////        _urlConnection.setRequestProperty("Accept","*/*");
+//
+//
+////        HttpConnection httpConnection
+//
+////        OutputStreamWriter wr= new OutputStreamWriter(_urlConnection.getOutputStream());
+////        wr.write(bodyJson);
+////        wr.flush();
+//
+////        InputStream str = ((HttpsURLConnection) _urlConnection).getErrorStream();
+//
+//        InputStream inStream = _urlConnection.getInputStream();
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
+//
 //        String line = "";
 //        StringBuilder strBuilder = new StringBuilder(line);
 //        while((line = reader.readLine()) != null) {
 //            strBuilder.append(line);
 //        }
+//
+//
+//        Object obj = _urlConnection.getContent();
+
+//        _response = _urlConnection.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(_response));
+
+        String line = "";
+        StringBuilder strBuilder = new StringBuilder(line);
+        while((line = reader.readLine()) != null) {
+            strBuilder.append(line);
+        }
 
 //        String response = strBuilder.toString();
 //        System.out.println("GOT RESPONSE: " + response);
 
-        wr.close();
+//        wr.close();
     }
 }

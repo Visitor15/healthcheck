@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/home/visitor15/dev/git/healthcheck/android/Health/nascentToolkit/build/intermediates/bundles/debug/res/values/values.xml -->
+    <!-- From: file:/Users/nchampagne/dev/projects/healthcheck/android/Health/nascentToolkit/build/intermediates/bundles/debug/res/values/values.xml -->
     <eat-comment/>
     <string name="app_name">ServiceClient</string>
     <style name="AppBaseTheme" parent="android:Theme.Light">

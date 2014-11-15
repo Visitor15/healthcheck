@@ -319,14 +319,14 @@ public class SharecareClient extends ServiceClient
 //                break;
 //        }
 
-        DATA_SERVICE_URL = "https://data.sharecare.com";
+        DATA_SERVICE_URL = "http://";
         AUTH_SERVICE_URL = "https://auth.sharecare.com";
 
 //        CLIENT_ID = "askmd-mobile";
 //        CLIENT_SECRET = "u7#kl91hkg0";
 
-        CLIENT_ID = "askmd-mobile";
-        CLIENT_SECRET = "u7#kl91hkg0";
+        CLIENT_ID = "testuser@email.com";
+        CLIENT_SECRET = "password";
 
         REGISTER_ENDPOINT = AUTH_SERVICE_URL + "/account/";
         LOGIN_ENDPOINT = AUTH_SERVICE_URL + "/access/";
@@ -1035,7 +1035,7 @@ public class SharecareClient extends ServiceClient
 
         // Create request headers.
         final HashMap<String, String> headers = new HashMap<String, String>(2);
-        headers.put("Authorization", AUTHORIZATION_HEADER);
+        headers.put("Authorization", "SSO rDjKqrmf_M7pZGZq6l6V8rPdNHz0h6i_X3fzsRE8AxnqxiYkrwjwFkeotq3pm5YHdiI0wZCQiwh4-zNY-nxmqYgB06GA6ntiS-oKwS3w_cV7FuCPABQ7J_GwclJmz9ogDtcZrLBcWxp31aK4-c86KRhmQ9OgzOW0");
         headers.put("Content-Type", "application/json");
 
         // Create request parameters.
@@ -1051,7 +1051,7 @@ public class SharecareClient extends ServiceClient
 
         final Gson gson = new GsonBuilder().create();
         final String bodyJson = gson.toJson(body);
-        this.beginRequest(LOGIN_ENDPOINT, ServiceMethod.POST, headers,
+        this.beginRequest("http://192.168.201.53:8080/data/user/test-user-1/wall/mobile/private", ServiceMethod.GET, headers,
                 parameters, bodyJson, ServiceResponseFormat.GSON,
                 new ServiceResponseTransform<JsonElement, ResponseResult>()
                 {

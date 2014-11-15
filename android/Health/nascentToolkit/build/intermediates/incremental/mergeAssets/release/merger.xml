@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/home/visitor15/dev/git/healthcheck/android/Health/nascentToolkit/src/main/assets"/></dataSet><dataSet config="release"><source path="/home/visitor15/dev/git/healthcheck/android/Health/nascentToolkit/src/release/assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/Users/nchampagne/dev/projects/healthcheck/android/Health/nascentToolkit/src/main/assets"/></dataSet><dataSet config="release"><source path="/Users/nchampagne/dev/projects/healthcheck/android/Health/nascentToolkit/src/release/assets"/></dataSet></merger>
